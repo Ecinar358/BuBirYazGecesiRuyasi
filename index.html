@@ -20,6 +20,20 @@
             position: relative;
         }
 
+        /* Music play button */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.7);
+            color: #ffd700;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+
         /* Fixed Night Sky Effect */
         .night-sky {
             position: fixed;
@@ -136,6 +150,12 @@
     </style>
 </head>
 <body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.jsdelivr.net/gh/Ecinar358/BuBirYazGecesiRuyasi@main/mariage-damour-2186.mp3" type="audio/mpeg">
+    </audio>
+    <div id="musicButton" class="music-control">🎵 Müziği Başlat</div>
+
     <!-- Fixed Night Sky Elements -->
     <div class="night-sky" id="night-sky"></div>
 
@@ -222,6 +242,50 @@
             
             nightSky.appendChild(shootingStar);
         }
+
+        // Music handling
+        const bgMusic = document.getElementById('bgMusic');
+        const musicButton = document.getElementById('musicButton');
+        
+        // Set volume to 30%
+        bgMusic.volume = 0.3;
+        
+        // Try autoplay
+        document.addEventListener('DOMContentLoaded', function() {
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // Show music button if autoplay fails
+                    musicButton.style.display = 'block';
+                });
+            }
+        });
+        
+        // Play/pause when button is clicked
+        musicButton.addEventListener('click', function() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicButton.textContent = '🎵 Müzik Çalıyor';
+                setTimeout(() => {
+                    musicButton.style.display = 'none';
+                }, 2000);
+            } else {
+                bgMusic.pause();
+                musicButton.textContent = '🎵 Müziği Başlat';
+            }
+        });
+        
+        // Hide button when music starts playing
+        bgMusic.addEventListener('play', function() {
+            musicButton.style.display = 'none';
+        });
+        
+        // Show button when music is paused
+        bgMusic.addEventListener('pause', function() {
+            musicButton.style.display = 'block';
+            musicButton.textContent = '🎵 Müziği Başlat';
+        });
     </script>
 </body>
 </html>
