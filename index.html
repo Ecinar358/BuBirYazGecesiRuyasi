@@ -9,52 +9,86 @@
         body {
             font-family: 'Playfair Display', serif;
             background: linear-gradient(to bottom, 
-                #0a043c 0%, 
-                #1a237e 30%, 
-                #3d5afe 60%, 
+                #050520 0%, 
+                #0e0e40 25%, 
+                #1a1a6d 50%, 
+                #3d5afe 75%, 
                 #ffd1dc 100%);
             color: #ffffff;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Music play button */
-        .music-control {
+        /* Gerçekçi Ay */
+        .moon {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(0,0,0,0.7);
-            color: #ffd700;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-            display: none; /* Hidden by default */
+            top: 15%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            background: 
+                radial-gradient(circle at 30% 30%, 
+                    #f8f8f8 0%, 
+                    #e8e8e8 30%, 
+                    #d0d0d0 60%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 80px rgba(255, 255, 230, 0.8),
+                0 0 160px rgba(255, 255, 230, 0.4);
+            z-index: 1;
+            filter: blur(0.5px);
+            animation: moon-glow 8s infinite alternate ease-in-out;
+        }
+        
+        @keyframes moon-glow {
+            0% { opacity: 0.95; }
+            100% { opacity: 1; }
         }
 
-        /* Fixed Night Sky Effect */
+        /* Ay Işığı Halesi */
+        .moon-halo {
+            position: fixed;
+            top: calc(15% - 75px);
+            right: calc(10% - 75px);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, 
+                rgba(255,255,230,0.1) 0%, 
+                rgba(255,255,230,0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* Gerçekçi Gece Gökyüzü */
         .night-sky {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 40vh;
+            height: 100vh;
             pointer-events: none;
             z-index: 0;
-            background: linear-gradient(to bottom, 
-                rgba(10, 4, 60, 1) 0%, 
-                rgba(26, 35, 126, 0.8) 50%, 
-                rgba(61, 90, 254, 0) 100%);
+            background: 
+                radial-gradient(ellipse at top center, 
+                    rgba(255,255,255,0.03) 0%, 
+                    rgba(255,255,255,0) 70%),
+                linear-gradient(to bottom, 
+                    rgba(5,5,32,0.8) 0%, 
+                    rgba(14,14,64,0.6) 40%, 
+                    rgba(26,26,109,0.3) 80%);
         }
 
+        /* Gerçekçi Yıldızlar */
         .star {
             position: fixed;
             background-color: #ffffff;
             border-radius: 50%;
             animation: twinkle var(--duration) infinite ease-in-out;
             opacity: 0;
+            z-index: 1;
         }
 
         @keyframes twinkle {
@@ -62,6 +96,7 @@
             50% { opacity: 1; transform: scale(1.1); }
         }
 
+        /* Orijinal Yıldız Kayması Efektleri */
         .shooting-star {
             position: fixed;
             width: 3px;
@@ -70,6 +105,7 @@
             border-radius: 50%;
             animation: shooting var(--shooting-duration) linear infinite;
             opacity: 0;
+            z-index: 1;
         }
 
         @keyframes shooting {
@@ -79,10 +115,10 @@
             100% { transform: translateX(100vw) translateY(20vh); opacity: 0; }
         }
 
-        /* Scrollable Content */
+        /* İçerik Alanı */
         .content-wrapper {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             padding-top: 30vh;
             min-height: 100vh;
         }
@@ -93,6 +129,7 @@
             padding: 40px 20px;
         }
 
+        /* Orijinal Metin Stilleri */
         h1 {
             font-family: 'Dancing Script', cursive;
             color: #ffffff;
@@ -151,15 +188,16 @@
 </head>
 <body>
     <!-- Background Music -->
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" autoplay loop>
         <source src="https://cdn.jsdelivr.net/gh/Ecinar358/BuBirYazGecesiRuyasi@main/mariage-damour-2186.mp3" type="audio/mpeg">
     </audio>
-    <div id="musicButton" class="music-control">🎵 Müziği Başlat</div>
 
-    <!-- Fixed Night Sky Elements -->
+    <!-- Gece Elementleri -->
+    <div class="moon"></div>
+    <div class="moon-halo"></div>
     <div class="night-sky" id="night-sky"></div>
 
-    <!-- Scrollable Content -->
+    <!-- Orijinal İçerik -->
     <div class="content-wrapper">
         <div class="container">
             <h1>Ezgi & Ercüment</h1>
@@ -192,20 +230,21 @@
     </div>
 
     <script>
-        // Create night sky elements (fixed position)
+        // Create night sky elements
         const nightSky = document.getElementById('night-sky');
         
-        // Create stars (fixed position)
-        const starCount = 100;
+        // Gerçekçi Yıldızlar
+        const starCount = 200;
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
             
-            const size = Math.random() * 2 + 1;
-            const duration = Math.random() * 5 + 3 + 's';
-            const delay = Math.random() * 10 + 's';
+            const size = Math.random() * 1.2 + 0.8;
+            const duration = Math.random() * 7 + 4 + 's';
+            const delay = Math.random() * 15 + 's';
             const xPos = Math.random() * 100 + '%';
-            const yPos = Math.random() * 30 + 'vh';
+            const yPos = Math.random() * 100 + 'vh';
+            const opacity = Math.random() * 0.7 + 0.3;
             
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
@@ -213,15 +252,19 @@
             star.style.top = yPos;
             star.style.setProperty('--duration', duration);
             star.style.animationDelay = delay;
+            star.style.opacity = opacity;
             
-            if (Math.random() > 0.85) {
-                star.style.boxShadow = `0 0 ${size * 3}px ${size}px rgba(255, 255, 255, 0.4)`;
+            // Farklı yıldız renkleri
+            if (Math.random() > 0.9) {
+                star.style.backgroundColor = `hsl(${Math.random() * 60 + 200}, 80%, 80%)`; // Mavi ton
+            } else if (Math.random() > 0.95) {
+                star.style.backgroundColor = `hsl(${Math.random() * 30 + 40}, 80%, 80%)`; // Sarı ton
             }
             
             nightSky.appendChild(star);
         }
         
-        // Create shooting stars (fixed position)
+        // Orijinal Yıldız Kaymaları
         const shootingStarCount = 3;
         for (let i = 0; i < shootingStarCount; i++) {
             const shootingStar = document.createElement('div');
@@ -244,47 +287,22 @@
         }
 
         // Music handling
-        const bgMusic = document.getElementById('bgMusic');
-        const musicButton = document.getElementById('musicButton');
-        
-        // Set volume to 30%
-        bgMusic.volume = 0.3;
-        
-        // Try autoplay
         document.addEventListener('DOMContentLoaded', function() {
-            const playPromise = bgMusic.play();
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.3;
             
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    // Show music button if autoplay fails
-                    musicButton.style.display = 'block';
-                });
-            }
-        });
-        
-        // Play/pause when button is clicked
-        musicButton.addEventListener('click', function() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicButton.textContent = '🎵 Müzik Çalıyor';
-                setTimeout(() => {
-                    musicButton.style.display = 'none';
-                }, 2000);
-            } else {
-                bgMusic.pause();
-                musicButton.textContent = '🎵 Müziği Başlat';
-            }
-        });
-        
-        // Hide button when music starts playing
-        bgMusic.addEventListener('play', function() {
-            musicButton.style.display = 'none';
-        });
-        
-        // Show button when music is paused
-        bgMusic.addEventListener('pause', function() {
-            musicButton.style.display = 'block';
-            musicButton.textContent = '🎵 Müziği Başlat';
+            // Try autoplay
+            bgMusic.play().catch(e => {
+                // If blocked, play on any user interaction
+                const playOnInteraction = () => {
+                    bgMusic.play();
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                };
+                
+                document.addEventListener('click', playOnInteraction, { once: true });
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+            });
         });
     </script>
 </body>
